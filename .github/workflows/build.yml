@@ -1,4 +1,4 @@
-name: Build Android APK and AAB
+name: Build Signed Android APK and AAB
 
 on: [push]
 
@@ -16,16 +16,20 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         
-    - name: Build APK and AAB
+    - name: Generate debug keystore
+      run: |
+        keytool -genkey -v -keystore debug.keystore -alias androiddebugkey -storepass android -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
+        
+    - name: Build signed APK and AAB
       run: |
         chmod +x gradlew
-        ./gradlew assembleRelease
+        ./gradlew assembleRelease -Pandroid.injected.signing.store.file=$(pwd)/debug.keystore -Pandroid.injected.signing.store.password=android -Pandroid.injected.signing.key.alias=androiddebugkey -Pandroid.injected.signing.key.password=android
         ./gradlew bundleRelease
         
-    - name: Upload APK
+    - name: Upload signed APK
       uses: actions/upload-artifact@v4
       with:
-        name: app-apk
+        name: app-signed-apk
         path: app/build/outputs/apk/release/*.apk
         
     - name: Upload AAB
