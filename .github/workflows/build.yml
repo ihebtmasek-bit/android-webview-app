@@ -23,6 +23,17 @@ jobs:
     - name: Setup Android SDK
       uses: android-actions/setup-android@v2
       
+    - name: Verify Keystore exists
+      run: |
+        if [ -f "webview-app.keystore" ]; then
+          echo "✅ Keystore found"
+          # Vérifier l'alias existant
+          keytool -list -keystore webview-app.keystore -storepass webview123456 -alias webview
+        else
+          echo "❌ Keystore not found"
+          exit 1
+        fi
+      
     - name: Make gradlew executable
       run: chmod +x ./gradlew
       
