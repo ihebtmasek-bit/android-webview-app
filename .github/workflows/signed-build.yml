@@ -1,0 +1,46 @@
+name: Build Signed AAB
+
+on: [push]
+
+jobs:
+  build-signed:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        
+    - name: Generate signing keystore
+      run: |
+        keytool -genkey -v \
+          -keystore webview-app.keystore \
+          -alias webview \
+          -keyalg RSA \
+          -keysize 2048 \
+          -validity 10000 \
+          -storepass webview123456 \
+          -keypass webview123456 \
+          -dname "CN=WebView App, OU=Android, O=WebView App, L=Paris, ST=France, C=FR"
+        
+    - name: Build signed AAB
+      run: |
+        chmod +x gradlew
+        ./gradlew bundleRelease
+        
+    - name: Upload signed AAB
+      uses: actions/upload-artifact@v4
+      with:
+        name: webview-app-signed-aab
+        path: app/build/outputs/bundle/release/*.aab
+        
+    - name: Upload keystore backup
+      uses: actions/upload-artifact@v4
+      with:
+        name: webview-keystore-backup
+        path: webview-app.keystore

@@ -3,24 +3,34 @@ plugins {
 }
 
 android {
-    namespace 'com.zmr.app'
-    compileSdk 34
+    compileSdk 33
+    namespace 'com.yourapp.webview'
 
     defaultConfig {
-        applicationId "com.zmr.app"
+        applicationId "com.yourapp.webview"
         minSdk 21
-        targetSdk 34
+        targetSdk 33
         versionCode 1
         versionName "1.0"
+    }
+
+    signingConfigs {
+        release {
+            storeFile file('../webview-app.keystore')
+            storePassword 'webview123456'
+            keyAlias 'webview'
+            keyPassword 'webview123456'
+        }
     }
 
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
-    
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -29,5 +39,5 @@ android {
 
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'androidx.webkit:webkit:1.10.0'
+    implementation 'com.google.android.material:material:1.9.0'
 }
