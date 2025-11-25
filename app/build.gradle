@@ -4,10 +4,10 @@ plugins {
 
 android {
     compileSdk 35
-    namespace 'com.znote.app'
+    namespace 'com.yourapp.webview'
 
     defaultConfig {
-        applicationId "com.znote.app"
+        applicationId "com.yourapp.webview"
         minSdk 21
         targetSdk 35
         versionCode 2
