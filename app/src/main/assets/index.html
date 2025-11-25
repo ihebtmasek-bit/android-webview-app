@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Notes App</title>
+    <title>Z Notes App</title>
     <style>
         * {
             margin: 0;
@@ -224,8 +224,8 @@
 <body>
     <div class="container">
         <header>
-            <h1> Notes App</h1>
-            <p class="subtitle">Take notes, improve your </p>
+            <h1>Z Notes App</h1>
+            <p class="subtitle">Take notes, organize your thoughts</p>
         </header>
         
         <div class="app-container">
@@ -239,7 +239,7 @@
                     
                     <div class="form-group">
                         <label for="noteContent">Content</label>
-                        <textarea id="noteContent" placeholder="Write your note in ..." required></textarea>
+                        <textarea id="noteContent" placeholder="Write your note here..." required></textarea>
                     </div>
                     
                     <button type="submit" class="btn">Save Note</button>
@@ -282,7 +282,7 @@
             const todayNotesEl = document.getElementById('todayNotes');
             const wordCountEl = document.getElementById('wordCount');
             
-            let notes = JSON.parse(localStorage.getItem('Notes')) || [];
+            let notes = JSON.parse(localStorage.getItem('ZNotes')) || [];
             
             // Display existing notes
             displayNotes();
@@ -369,7 +369,7 @@
             
             // Save notes to localStorage
             function saveNotes() {
-                localStorage.setItem('Notes', JSON.stringify(notes));
+                localStorage.setItem('ZNotes', JSON.stringify(notes));
             }
             
             // Update statistics
