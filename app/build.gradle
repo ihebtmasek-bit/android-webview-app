@@ -4,10 +4,10 @@ plugins {
 
 android {
     compileSdk 35
-    namespace 'com.zcalculator.app'
+    namespace 'com.znote.app'
 
     defaultConfig {
-        applicationId "com.zcalculator.app"
+        applicationId "com.znote.app"
         minSdk 21
         targetSdk 35
         versionCode 2
