@@ -3,13 +3,13 @@ plugins {
 }
 
 android {
-    compileSdk 33
-    namespace 'com.yourapp.webview'
+    compileSdk 35
+    namespace 'com.zcalculator.app'
 
     defaultConfig {
-        applicationId "com.yourapp.webview"
+        applicationId "com.zcalculator.app"
         minSdk 21
-        targetSdk 33
+        targetSdk 35
         versionCode 1
         versionName "1.0"
     }
@@ -39,5 +39,5 @@ android {
 
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.9.0'
+    implementation 'com.google.android.material:material:1.11.0'
 }

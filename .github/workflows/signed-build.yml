@@ -1,6 +1,9 @@
-name: Build Signed AAB
+name: Build Signed AAB - API 35
 
-on: [push]
+on: 
+  push:
+    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   build-signed:
@@ -16,6 +19,9 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v3
+        
     - name: Generate signing keystore
       run: |
         keytool -genkey -v \
@@ -28,7 +34,7 @@ jobs:
           -keypass webview123456 \
           -dname "CN=WebView App, OU=Android, O=WebView App, L=Paris, ST=France, C=FR"
         
-    - name: Build signed AAB
+    - name: Build signed AAB with API 35
       run: |
         chmod +x gradlew
         ./gradlew bundleRelease
@@ -36,7 +42,7 @@ jobs:
     - name: Upload signed AAB
       uses: actions/upload-artifact@v4
       with:
-        name: webview-app-signed-aab
+        name: webview-app-signed-aab-api35
         path: app/build/outputs/bundle/release/*.aab
         
     - name: Upload keystore backup
