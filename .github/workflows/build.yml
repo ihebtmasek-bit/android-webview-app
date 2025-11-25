@@ -23,14 +23,16 @@ jobs:
     - name: Setup Android SDK
       uses: android-actions/setup-android@v2
       
-    - name: Verify Keystore exists
+    - name: Verify Keystore
       run: |
+        echo "🔍 Vérification du keystore..."
         if [ -f "webview-app.keystore" ]; then
-          echo "✅ Keystore found"
-          # Vérifier l'alias existant
+          echo "✅ Keystore trouvé"
           keytool -list -keystore webview-app.keystore -storepass webview123456 -alias webview
+          echo "✅ Keystore validé avec succès"
         else
-          echo "❌ Keystore not found"
+          echo "❌ ERREUR: Keystore non trouvé"
+          echo "Le fichier webview-app.keystore doit être présent dans la racine du repository"
           exit 1
         fi
       
@@ -47,11 +49,4 @@ jobs:
       with:
         name: z-notes-app-aab
         path: app/build/outputs/bundle/release/app-release.aab
-        retention-days: 30
-        
-    - name: Upload APK artifact (fallback)
-      uses: actions/upload-artifact@v3
-      with:
-        name: z-notes-app-apk
-        path: app/build/outputs/apk/release/app-release.apk
         retention-days: 30
