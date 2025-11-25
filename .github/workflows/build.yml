@@ -1,6 +1,10 @@
-name: Build Signed Android APK and AAB
+name: Build Android App Bundle
 
-on: [push]
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
   build:
@@ -8,32 +12,35 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v3
       
-    - name: Setup Java
-      uses: actions/setup-java@v4
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
       with:
         java-version: '17'
         distribution: 'temurin'
         
-    - name: Generate debug keystore
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v2
+      
+    - name: Make gradlew executable
+      run: chmod +x ./gradlew
+      
+    - name: Build Release AAB
       run: |
-        keytool -genkey -v -keystore debug.keystore -alias androiddebugkey -storepass android -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
-        
-    - name: Build signed APK and AAB
-      run: |
-        chmod +x gradlew
-        ./gradlew assembleRelease -Pandroid.injected.signing.store.file=$(pwd)/debug.keystore -Pandroid.injected.signing.store.password=android -Pandroid.injected.signing.key.alias=androiddebugkey -Pandroid.injected.signing.key.password=android
+        ./gradlew clean
         ./gradlew bundleRelease
         
-    - name: Upload signed APK
-      uses: actions/upload-artifact@v4
+    - name: Upload AAB artifact
+      uses: actions/upload-artifact@v3
       with:
-        name: app-signed-apk
-        path: app/build/outputs/apk/release/*.apk
+        name: z-notes-app-aab
+        path: app/build/outputs/bundle/release/app-release.aab
+        retention-days: 30
         
-    - name: Upload AAB
-      uses: actions/upload-artifact@v4
+    - name: Upload APK artifact (fallback)
+      uses: actions/upload-artifact@v3
       with:
-        name: app-aab
-        path: app/build/outputs/bundle/release/*.aab
+        name: z-notes-app-apk
+        path: app/build/outputs/apk/release/app-release.apk
+        retention-days: 30
